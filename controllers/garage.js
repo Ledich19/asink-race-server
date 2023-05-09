@@ -1,93 +1,67 @@
-const garageRouter = require('express').Router()
-let cars = [{
-  "name": "Tesla",
-  "color": "#e6e6fa",
-  "id": 1
-}]
-//get all users dialogs without messages
-garageRouter.get('/', async (request, response) => {
-  console.log('garageRouter.get');
+const garageRouter = require("express").Router();
+let cars = [
+  {
+    name: "Tesla",
+    color: "#e6e6fa",
+    id: 1,
+  },
+];
+function generateId(existingIds) {
+  let id;
+  do {
+    id = Math.floor(Math.random() * 100000);
+  } while (existingIds.includes(id));
+  return id;
+}
 
-//   Query Params
-// Optional:
-// _page=[integer]
-// _limit=[integer]
-// If _limit param is passed api returns a header X-Total-Count that countains total number of records.
-  // [
-  //   {
-  //     "name": "Tesla",
-  //     "color": "#e6e6fa",
-  //     "id": 1
-  //   }
-  // ]
-// "X-Total-Count": "4"
-response.json(cars)
-})
-garageRouter.get('/:id', async (request, response) => {
-//   Code: 200 OK
-// Content:
-//   {
-//     "name": "Tesla",
-//     "color": "#e6e6fa",
-//     "id": 1
-//   }
-// Error Response:
+garageRouter.get("/", async (request, response) => {
+  const { _limit, _page } = request.query;
+  const startIndex = (_page - 1) * _limit;
+  const selectedComponents = cars.slice(startIndex, startIndex + _limit);
+  response.setHeader("X-Total-Count", cars.length);
+  response.json(selectedComponents);
+});
+garageRouter.get("/:id", async (request, response) => {
+  const id = request.params.id;
+  const car = cars.find((e) => e.id === parseInt(id));
+  if (car) {
+    response.json(car);
+  } else {
+    response.status(404).json({ error: "404 NOT FOUND" });
+  }
+});
+garageRouter.post("/", async (request, response) => {
+  const id = generateId(cars.map((car) => car.id));
+  const newCar = { ...request.body, id };
+  cars.push(newCar);
+  response.status(201).json(newCar);
+});
+garageRouter.delete("/:id", async (request, response) => {
+  const id = request.params.id;
+  const length = cars.length;
+  cars = cars.filter((car) => car.id !== parseInt(id));
 
-// Code: 404 NOT FOUND
-// Content:
-//   {}
-})
-garageRouter.post('/', async (request, response) => {
-//   Data Params
+  if (length !== cars.length) {
+    response.status(200).json({});
+  } else {
+    response.status(404).json({ error: "404 NOT FOUND" });
+  }
+});
+garageRouter.put("/:id", async (request, response) => {
+  const id = request.params.id;
+  const updateCar = cars.find((car) => car.id === parseInt(id));
+  const updatedCar = Object.assign({}, updateCar, request.body);
+  if (updatedCar) {
+    cars = cars.map((car) => {
+      if (car.id === parseInt(id)) {
+        return updatedCar;
+      }
+      return car;
+    });
+    response.status(200).json(cars.find((car) => car.id === parseInt(id)));
+  } else {
+    response.status(404).json({ error: "404 NOT FOUND" });
+  }
+});
 
-//   {
-//     name: string,
-//     color: string
-//   }
-// Success Response:
-
-// Code: 201 CREATED
-// Content:
-//   {
-//       "name": "New Red Car",
-//       "color": "#ff0000",
-//       "id": 10
-//   }
-
-})
-garageRouter.delete('/:id', async (request, response) => {
-  // Success Response:
-
-  // Code: 200 OK
-  // Content:
-  //   {}
-  // Error Response:
-  
-  // Code: 404 NOT FOUND
-  // Content:
-  //   {}
-})
-garageRouter.put('/:id', async (request, response) => {
-//   Data Params
-
-//   {
-//     name: string,
-//     color: string
-//   }
-// Success Response:
-
-// Code: 200 OK
-// Content:
-//   {
-//       "name": "Car with new name",
-//       "color": "#ff00ff",
-//       "id": 2
-//   }
-// Error Response:
-
-// Code: 404 NOT FOUND
-// Content:
-//   {}
-})
-
-module.exports = garageRouter
+module.exports = garageRouter;
