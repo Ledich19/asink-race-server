@@ -1,7 +1,13 @@
 const garageRouter = require('express').Router()
-
+let cars = [{
+  "name": "Tesla",
+  "color": "#e6e6fa",
+  "id": 1
+}]
 //get all users dialogs without messages
 garageRouter.get('/', async (request, response) => {
+  console.log('garageRouter.get');
+
 //   Query Params
 // Optional:
 // _page=[integer]
@@ -15,7 +21,7 @@ garageRouter.get('/', async (request, response) => {
   //   }
   // ]
 // "X-Total-Count": "4"
-
+response.json(cars)
 })
 garageRouter.get('/:id', async (request, response) => {
 //   Code: 200 OK
