@@ -1,0 +1,58 @@
+GET http://localhost:3000/garage
+###
+GET http://localhost:3000/garage?_limit=2
+###
+GET http://localhost:3000/garage?_page=1&_limit=2
+###
+GET http://localhost:3000/garage/2
+
+###
+POST http://localhost:3000/garage
+Content-Type: application/json
+
+{
+  "name": "New Red Car",
+  "color": "#ff0000",
+}
+
+###
+PATCH http://localhost:3000/engine?id=2&status=started
+
+###
+
+POST http://localhost:3000/notes
+Content-Type: application/json
+
+{
+  "name": "test post",
+  "category": "Task",
+  "content": "test post"
+}
+
+###
+PATCH  http://localhost:3000/notes/3
+Content-Type: application/json
+
+{
+  "name": "PATCH",
+  "category": "PATCH",
+  "content": "PATCH"
+}
+
+###
+PATCH  http://localhost:3000/notes/3
+Content-Type: application/json
+
+{
+  "content": "PATCH"
+}
+
+###
+PATCH  http://localhost:3000/notes/4
+Content-Type: application/json
+
+{
+  "name": "PATCH",
+  "category": "Task",
+  "content": "PATCH"
+}
