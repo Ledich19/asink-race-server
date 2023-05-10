@@ -1,5 +1,5 @@
 const garageRouter = require("express").Router();
-const { db, addCar, deleteCar, updateCar } = require("./db.js");
+const { db, addCar, deleteCar, updateCar } = require("../models/db.js");
 
 function generateId(existingIds) {
   let id;

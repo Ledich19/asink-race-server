@@ -1,5 +1,5 @@
 const winnersRouter = require("express").Router();
-const { db, addWinner, deleteWinner, updateWinner } = require("./db.js");
+const { db, addWinner, deleteWinner, updateWinner } = require("../models/db.js");
 //get all users dialogs without messages
 winnersRouter.get("/", async (request, response) => {
   const { _limit, _page, _sort, _order } = request.query;
