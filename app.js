@@ -6,8 +6,8 @@ const app = express()
 const cors = require('cors')
 
 const garageRouter = require('./controllers/garage')
-const mailsRouter = require('./controllers/winners')
-const dialogsRouter = require('./controllers/engine')
+const engineRouter = require('./controllers/engine')
+const winnersRouter = require('./controllers/winners')
 
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
@@ -36,8 +36,8 @@ app.use(morgan('dev'))
 app.use(morgan(' \x1b[35m :body  \x1b[0m'))
 
 app.use('/garage', garageRouter)
-app.use('/api/mails', mailsRouter)
-app.use('/api/dialogs', dialogsRouter)
+app.use('/engine', engineRouter)
+app.use('/winners', winnersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
